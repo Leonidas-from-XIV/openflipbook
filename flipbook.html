@@ -26,27 +26,36 @@
       }
 
       function image_unzoom(event) {
+	  var container = $(event.target).closest('div');
 	  $(event.target).hide();
-	  $('#left').show();
-	  $('#right').show();
+	  container.data('spacer').show();
+	  container.data('left').show();
+	  container.data('right').show();
       }
 
       function image_zoom(event) {
+	  var container = $(event.target).closest('div');
 	  var zoomed = $('<img src="image_01_large.jpg" />');
 	  zoomed.click(image_unzoom);
-	  $('#flipbook').append(zoomed);
-	  $('#left').hide();
-	  $('#right').hide();
-	  zoomed.hide();
-	  zoomed.show('clip');
+	  container.append(zoomed);
+	  container.data('left').hide();
+	  container.data('right').hide();
+	  container.data('spacer').hide();
+	  zoomed.hide().show('clip');
       }
 
-      function flipbook(element) {
+      function flipbook(element, images) {
 	  style_element(element);
-	  var left = $('<img src="image_01_small.jpg" id="left" />');
-	  var right = $('<img src="image_02_small.jpg" id="right" />');
+	  var spacer = $('<div class="spacer"></div>');
+	  spacer.css('height', '162px');
+	  element.data('spacer', spacer);
+	  var left = $('<img src="image_01_small.jpg" />');
+	  var right = $('<img src="image_02_small.jpg" />');
+	  element.data('left', left);
+	  element.data('right', right);
 	  left.click(image_zoom);
 	  right.click(image_zoom);
+	  element.append(spacer);
 	  element.append(left);
 	  element.append(right);
 	  return true;
