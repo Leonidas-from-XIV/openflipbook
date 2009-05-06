@@ -27,31 +27,28 @@
 	  element.css('border', '2px dashed white');
       }
 
-      function image_unzoom(event) {
+      function small_gesture(event) {
+	  /* called in mousedown of small images */
 	  var container = $(event.target).closest('div');
-	  $(event.target).hide();
-	  container.data('spacer').show();
-	  container.data('left').show();
-	  container.data('right').show();
-      }
-
-      function image_zoom(event) {
-	  var container = $(event.target).closest('div');
-	  var zoomed = $('<img src="image_01_large.jpg" />');
-	  zoomed.click(image_unzoom);
-	  container.append(zoomed);
-	  container.data('left').hide();
-	  container.data('right').hide();
-	  container.data('spacer').hide();
-	  zoomed.hide().show('clip');
-      }
-
-      function mouse_upped(event) {
-	  console.log(event.gesture);
 	  switch (event.gesture) {
 	  case 'U':
 	  case 'D':
-	      console.log('Zoom');
+	      container.data('left').hide();
+	      container.data('right').hide();
+	      container.data('spacer').hide();
+	      container.data('zoomed').show('clip');
+	  }
+      }
+
+      function large_gesture(event) {
+	  var container = $(event.target).closest('div');
+	  switch (event.gesture) {
+	  case 'U':
+	  case 'D':
+	      $(event.target).hide();
+	      container.data('spacer').show();
+	      container.data('left').show();
+	      container.data('right').show();
 	  }
       }
 
@@ -70,17 +67,29 @@
 	  element.data('spacer', spacer);
 	  element.append(spacer);
 
+	  var zoomed = $('<img src="image_01_large.jpg" />');
+	  zoomed.gestureable();
+	  zoomed.mouseup(large_gesture).
+	  mousedown(disable_scroll).
+	  hide();
+
+	  element.data('zoomed', zoomed);
+	  element.append(zoomed);
+
 	  // create the images
 	  var left = $('<img src="image_01_small.jpg" />');
 	  var right = $('<img src="image_02_small.jpg" />');
 	  element.data('left', left);
 	  element.data('right', right);
-	  // enable gestures
-	  left.gestureable();
-	  left.mouseup(mouse_upped);
-	  left.mousedown(disable_scroll);
-	  element.append(left);
-	  element.append(right);
+
+	  $([left, right]).each(function (key, value) {
+	      // enable gestures
+	      value.gestureable();
+	      value.mouseup(small_gesture);
+	      value.mousedown(disable_scroll);
+	      // add to the display
+	      element.append(value);
+	  });
       }
 
       $(document).ready(function () {
