@@ -54,13 +54,15 @@
       function small_gesture(event) {
 	  /* called in mousedown of small images */
 	  var container = $(event.target).closest('div');
+	  var large = $(event.target).attr('src').replace(/small/, 'large');
+
 	  switch (event.gesture) {
 	  case 'U':
 	  case 'D':
 	      container.data('left').hide();
 	      container.data('right').hide();
 	      container.data('spacer').hide();
-	      container.data('zoomed').show('clip');
+	      container.data('zoomed').attr('src', large).show('clip');
 	  }
       }
 
@@ -83,8 +85,6 @@
 
       function flipbook(element, images) {
 	  var manager = new ImageManager(images);
-	  console.log(manager.getCurrentPages());
-	  console.log(manager.turnNext());
 
 	  // apply the style
 	  style_element(element);
@@ -95,7 +95,7 @@
 	  element.data('spacer', spacer);
 	  element.append(spacer);
 
-	  var zoomed = $('<img src="image_01_large.jpg" />');
+	  var zoomed = $('<img />');
 	  zoomed.gestureable();
 	  zoomed.mouseup(large_gesture).
 	  mousedown(disable_scroll).
@@ -105,8 +105,9 @@
 	  element.append(zoomed);
 
 	  // create the images
-	  var left = $('<img src="image_01_small.jpg" />');
-	  var right = $('<img src="image_02_small.jpg" />');
+	  var currentImages = manager.getCurrentPages();
+	  var left = $('<img src="' + currentImages[0] + '_small.jpg" />');
+	  var right = $('<img src="' + currentImages[1] + '_small.jpg" />');
 	  element.data('left', left);
 	  element.data('right', right);
 
