@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC
+    "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+  <head>
+    <title>Flipbook</title>
+    <style type="text/css">
+      body {
+	  background-color: black;
+	  color: white;
+      }
+
+      .ui-effects-transfer {
+	  border: 2px dotted gray;
+      }
+    </style>
+    <script type="text/javascript" src="jquery.js"></script>    
+    <script type="text/javascript" src="jquery-ui.js"></script>
+    <script type="text/javascript">
+      function style_element(element) {
+	  element.css('background-color', 'black');
+          element.css('width', '900px');
+	  element.css('height', '650px');
+	  element.css('border', '2px dashed white');
+      }
+
+      function image_unzoom(event) {
+	  $(event.target).hide();
+	  $('#left').show();
+	  $('#right').show();
+      }
+
+      function image_zoom(event) {
+	  var zoomed = $('<img src="image_01_large.jpg" />');
+	  zoomed.click(image_unzoom);
+	  $('#flipbook').append(zoomed);
+	  $('#left').hide();
+	  $('#right').hide();
+	  zoomed.hide();
+	  zoomed.show('clip');
+      }
+
+      function flipbook(element) {
+	  style_element(element);
+	  var left = $('<img src="image_01_small.jpg" id="left" />');
+	  var right = $('<img src="image_02_small.jpg" id="right" />');
+	  left.click(image_zoom);
+	  right.click(image_zoom);
+	  element.append(left);
+	  element.append(right);
+	  return true;
+      }
+
+      $(document).ready(function () {
+	  flipbook($('#flipbook'));
+	});
+    </script>
+  </head>
+  <body>
+    <p>This is this flipbook</p>
+    <div id="flipbook"></div>
+  </body>
+</html>
