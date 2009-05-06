@@ -54,6 +54,7 @@
       function small_gesture(event) {
 	  /* called in mousedown of small images */
 	  var container = $(event.target).closest('div');
+	  var manager = container.data('manager');
 	  var large = $(event.target).attr('src').replace(/small/, 'large');
 
 	  switch (event.gesture) {
@@ -63,6 +64,17 @@
 	      container.data('right').hide();
 	      container.data('spacer').hide();
 	      container.data('zoomed').attr('src', large).show('clip');
+	      break;
+	  case 'L':
+	      var images = manager.turnPrevious();
+	      container.data('left').attr('src', images[0] + '_small.jpg');
+	      container.data('right').attr('src', images[1] + '_small.jpg');
+	      break;
+	  case 'R':
+	      var images = manager.turnNext();
+	      container.data('left').attr('src', images[0] + '_small.jpg');
+	      container.data('right').attr('src', images[1] + '_small.jpg');
+	      break;
 	  }
       }
 
@@ -85,6 +97,7 @@
 
       function flipbook(element, images) {
 	  var manager = new ImageManager(images);
+	  element.data('manager', manager);
 
 	  // apply the style
 	  style_element(element);
