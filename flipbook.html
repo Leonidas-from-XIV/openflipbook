@@ -20,7 +20,31 @@
     <script type="text/javascript" src="jquery.event.special.gesture.js"></script>    
     <script type="text/javascript" src="jquery.gestureable.js"></script>    
     <script type="text/javascript">
-      function style_element(element) {
+      /* Code to do some fancy book-like effects
+       */
+
+       /* a closure-based class */
+       var ImageManager = function (images) {
+	   var self = this;
+	   var currentPage = 0;
+
+	   self.getCurrentPages = function () {
+	       return [images[currentPage], 
+		       images[currentPage+1]];
+	   };
+
+	   self.turnNext = function () {
+	       currentPage += 2;
+	       return self.getCurrentPages();
+	   };
+
+	   self.turnPrevious = function () {
+	       currentPage -= 2;
+	       return self.getCurrentPages();
+	   };
+       };
+
+       function style_element(element) {
 	  element.css('background-color', 'black');
           element.css('width', '900px');
 	  element.css('height', '650px');
@@ -58,6 +82,10 @@
       }
 
       function flipbook(element, images) {
+	  var manager = new ImageManager(images);
+	  console.log(manager.getCurrentPages());
+	  console.log(manager.turnNext());
+
 	  // apply the style
 	  style_element(element);
 
