@@ -17,6 +17,8 @@
     </style>
     <script type="text/javascript" src="jquery.js"></script>    
     <script type="text/javascript" src="jquery-ui.js"></script>
+    <script type="text/javascript" src="jquery.event.special.gesture.js"></script>    
+    <script type="text/javascript" src="jquery.gestureable.js"></script>    
     <script type="text/javascript">
       function style_element(element) {
 	  element.css('background-color', 'black');
@@ -44,25 +46,49 @@
 	  zoomed.hide().show('clip');
       }
 
+      function mouse_upped(event) {
+	  console.log(event.gesture);
+	  switch (event.gesture) {
+	  case 'U':
+	  case 'D':
+	      console.log('Zoom');
+	  }
+      }
+
+      function disable_scroll(event) {
+	  /* Simply disables the dragging of elements */
+	  return false;
+      }
+
       function flipbook(element, images) {
+	  // apply the style
 	  style_element(element);
+
+	  // create a spacer div and attach it
 	  var spacer = $('<div class="spacer"></div>');
 	  spacer.css('height', '162px');
 	  element.data('spacer', spacer);
+	  element.append(spacer);
+
+	  // create the images
 	  var left = $('<img src="image_01_small.jpg" />');
 	  var right = $('<img src="image_02_small.jpg" />');
 	  element.data('left', left);
 	  element.data('right', right);
-	  left.click(image_zoom);
-	  right.click(image_zoom);
-	  element.append(spacer);
+	  // enable gestures
+	  left.gestureable();
+	  left.mouseup(mouse_upped);
+	  left.mousedown(disable_scroll);
 	  element.append(left);
 	  element.append(right);
-	  return true;
       }
 
       $(document).ready(function () {
-	  flipbook($('#flipbook'));
+	  flipbook($('#flipbook'),
+		   ['image_01', 'image_02', 'image_03', 'image_04',
+		    'image_05', 'image_06', 'image_07', 'image_08',
+		    'image_09', 'image_10', 'image_11', 'image_12',
+		    'image_13', 'image_14', 'image_15']);
 	});
     </script>
   </head>
