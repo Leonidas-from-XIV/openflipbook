@@ -110,11 +110,31 @@
 	      value.append(new_content);
 	      new_content.css('position', 'absolute').
 	      css('left', 0).css('top', 0);
-
-	      old_content.hide('puff', undefined, undefined, function () {
-		  old_content.remove();
-	      });
 	  });
+
+	  // TODO: determine which frame to fold first
+	  fold(right, left);
+      }
+
+      function fold(first, second) {
+	  // options
+	  var effect = 'blind';
+	  var options = {direction: 'horizontal'};
+	  var duration = undefined;
+
+	  // hide the first frame
+	  var first_old = $('img:first', first);
+	  first_old.hide(effect, options, duration, 
+			   function () {
+			       first_old.remove();
+
+			       // now do the second frame
+			       var second_old = $('img:first', second);
+			       second_old.hide(effect, options, duration,
+						function () {
+						    second_old.remove();
+						});
+			   });
       }
 
       function flipbook(element, images) {
