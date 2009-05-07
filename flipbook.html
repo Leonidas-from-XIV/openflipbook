@@ -111,8 +111,9 @@
 	      new_content.css('position', 'absolute').
 	      css('left', 0).css('top', 0);
 
-	      // remove the old image from the DOM
-	      old_content.remove();
+	      old_content.hide('puff', undefined, undefined, function () {
+		  old_content.remove();
+	      });
 	  });
       }
 
