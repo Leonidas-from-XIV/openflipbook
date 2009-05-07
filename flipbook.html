@@ -107,9 +107,9 @@
 	      // add the new image below
 	      var new_content = $('<img src="' + images[key] 
 				  + '_small.jpg" />');
+	      new_content.css('position', 'absolute').css('top', 0).
+	      css((key == 0) ? 'right' : 'left', 0);
 	      value.append(new_content);
-	      new_content.css('position', 'absolute').
-	      css('left', 0).css('top', 0);
 	  });
 
 	  // TODO: determine which frame to fold first
