@@ -112,27 +112,27 @@
 	      value.append(new_content);
 	  });
 
-	  fold(right, left);
+	  fold([right, 'left'], [left, 'left']);
       }
 
       function fold(first, second) {
 	  // options
 	  var effect = 'slide';
-	  var options = {direction: 'left'};
 	  var duration = undefined;
 
 	  // hide the first frame
-	  var first_old = $('img:first', first);
-	  first_old.hide(effect, options, duration, 
+	  var first_old = $('img:first', first[0]);
+	  first_old.hide(effect, {direction: first[1]}, duration, 
 			   function () {
 			       first_old.remove();
 
 			       // now do the second frame
-			       var second_old = $('img:first', second);
-			       second_old.hide(effect, options, duration,
-						function () {
-						    second_old.remove();
-						});
+			       var second_old = $('img:first', second[0]);
+			       second_old.hide(effect, {direction: second[1]},
+					       duration,
+					       function () {
+						   second_old.remove();
+					       });
 			   });
       }
 
