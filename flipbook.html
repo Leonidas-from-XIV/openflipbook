@@ -112,14 +112,13 @@
 	      value.append(new_content);
 	  });
 
-	  // TODO: determine which frame to fold first
 	  fold(right, left);
       }
 
       function fold(first, second) {
 	  // options
-	  var effect = 'blind';
-	  var options = {direction: 'horizontal'};
+	  var effect = 'slide';
+	  var options = {direction: 'left'};
 	  var duration = undefined;
 
 	  // hide the first frame
