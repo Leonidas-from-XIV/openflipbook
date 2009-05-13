@@ -100,16 +100,11 @@
 	  var right = container.data('right');
 
 	  $([left, right]).each(function (key, value) {
-	      // raise the z-index of the image that already exists inside
-	      var old_content = $('img:first', value);
-	      //old_content.css('z-index', 1);
-
 	      // add the new image below
 	      var new_content = $('<img src="' + images[key] 
 				  + '_small.jpg" />');
 	      new_content.css('position', 'absolute').css('top', 0);
 	      new_content.hide();
-	      //css((key == 0) ? 'right' : 'left', 0);
 	      value.append(new_content);
 	  });
 
