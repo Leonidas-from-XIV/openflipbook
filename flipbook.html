@@ -110,10 +110,10 @@
 
 	  switch (orientation) {
 	  case 'next':
-	      fold(right, left);
+	      fold([right, 'left'], [left, 'right']);
 	      break;
 	  case 'prev':
-	      fold(left, right);
+	      fold([left, 'right'], [right, 'left']);
 	      break;
 	  case 'initial':
 	  case undefined:
@@ -130,21 +130,21 @@
 	  var duration = undefined;
 
 	  // hide the first frame
-	  var first_old = $('img:first', first);
+	  var first_old = $('img:first', first[0]);
 	  var first_new = first_old.next();
-	  var second_old = $('img:first', second);
+	  var second_old = $('img:first', second[0]);
 	  var second_new = second_old.next();
 
 	  // move old one to front
 	  first_old.css('z-index', 1);
 	  first_new.show(effect, undefined, 10, function () { 
 	      console.log('shown', this, first_old);
-	      first_old.hide(effect, {direction: 'left'}, duration, function () { 
+	      first_old.hide(effect, {direction: first[1]}, duration, function () { 
 		  console.log('removing', first_old);
 		  first_old.remove();
 
 		  // and now the same thing with the other side
-		  second_new.show(effect, {direction: 'right'}, duration, function() { 
+		  second_new.show(effect, {direction: second[1]}, duration, function() { 
 		      second_old.remove();
 		  });
 	      });
