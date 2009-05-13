@@ -23,33 +23,26 @@
       /* Code to do some fancy book-like effects
        */
 
-       /* a closure-based class */
-       var ImageManager = function (images) {
-	   var self = this;
-	   var currentPage = 0;
+      /* a closure-based class */
+      var ImageManager = function (images) {
+	  var self = this;
+	  var currentPage = 0;
 
-	   self.getCurrentPages = function () {
-	       return [images[currentPage], 
-		       images[currentPage+1]];
-	   };
+	  self.getCurrentPages = function () {
+	      return [images[currentPage], 
+		      images[currentPage+1]];
+	  };
 
-	   self.turnNext = function () {
-	       currentPage += 2;
-	       return self.getCurrentPages();
-	   };
+	  self.turnNext = function () {
+	      currentPage += 2;
+	      return self.getCurrentPages();
+	  };
 
-	   self.turnPrevious = function () {
-	       currentPage -= 2;
-	       return self.getCurrentPages();
-	   };
-       };
-
-       function style_element(element) {
-	  element.css('background-color', 'black');
-          element.css('width', '900px');
-	  element.css('height', '650px');
-	  element.css('border', '2px dashed white');
-      }
+	  self.turnPrevious = function () {
+	      currentPage -= 2;
+	      return self.getCurrentPages();
+	  };
+      };
 
       function small_gesture(event) {
 	  /* called in mousedown of small images */
@@ -99,15 +92,18 @@
 	  var left = container.data('left');
 	  var right = container.data('right');
 
-	  $([left, right]).each(function (key, value) {
+	  $([left, right]).each(function (index, value) {
 	      // add the new image below
-	      var new_content = $('<img src="' + images[key] 
+	      var new_content = $('<img src="' + images[index] 
 				  + '_small.jpg" />');
-	      new_content.css('position', 'absolute').css('top', 0);
-	      new_content.hide();
+	      new_content.css('position', 'absolute').
+		  css('top', 0).
+		  hide();
+	      //new_content.hide();
 	      value.append(new_content);
 	  });
 
+	  // determine what to flip in which way
 	  switch (orientation) {
 	  case 'next':
 	      fold([right, 'left'], [left, 'right']);
@@ -118,7 +114,8 @@
 	  case 'initial':
 	  case undefined:
 	      // show stuff without an effect
-	      $([left, right]).each(function (key, value) {
+	      $([left, right]).each(function (index, value) {
+		  // show the next one and delete img:first
 		  $('img:first', value).next().show().prev().remove();
 	      });
 	  }
@@ -135,39 +132,43 @@
 	  var second_old = $('img:first', second[0]);
 	  var second_new = second_old.next();
 
-	  // move old one to front
+	  // move old image to front
 	  first_old.css('z-index', 1);
-	  first_new.show(effect, undefined, 10, function () { 
-	      console.log('shown', this, first_old);
-	      first_old.hide(effect, {direction: first[1]}, duration, function () { 
-		  console.log('removing', first_old);
+	  // show the new image immediately (time: 0)
+	  first_new.show(effect, undefined, 0, function () {
+	      // after it is shown, hide the old one with an effect
+	      first_old.hide(effect, {direction: first[1]}, duration, function () {
+		  // after that one is hidden, it is safe to remove it
 		  first_old.remove();
 
 		  // and now the same thing with the other side
-		  second_new.show(effect, {direction: second[1]}, duration, function() { 
+		  second_new.show(effect, {direction: second[1]}, duration, function() {
+		      // after the effect finished, it is safe to remove the old element
 		      second_old.remove();
 		  });
 	      });
 	  });
-
       }
 
-      function flipbook(element, images) {
+      function flipbook(div, images) {
 	  var manager = new ImageManager(images);
 	  // take care that the number of images stays even
 	  images.unshift(null);
 	  images.push(null);
 	  // attach the manager to the data attribute
-	  element.data('manager', manager);
+	  div.data('manager', manager);
 
 	  // apply the style
-	  style_element(element);
+	  div.css('background-color', 'black').
+              css('width', '900px').
+	      css('height', '650px').
+	      css('border', '2px dashed white');
 
 	  // create a spacer div and attach it
 	  var spacer = $('<div class="spacer"></div>');
 	  spacer.css('height', '162px');
-	  element.data('spacer', spacer);
-	  element.append(spacer);
+	  div.data('spacer', spacer);
+	  div.append(spacer);
 
 	  var zoomed = $('<img />');
 	  zoomed.gestureable();
@@ -175,29 +176,29 @@
 	      mousedown(disable_scroll).
 	      hide();
 
-	  element.data('zoomed', zoomed);
-	  element.append(zoomed);
+	  div.data('zoomed', zoomed);
+	  div.append(zoomed);
 
 	  // create the images
 	  var left = $('<div><img /></div>');
 	  var right = $('<div><img /></div>');
 	  left.css('float', 'left');
 	  right.css('float', 'right');
-	  element.data('left', left);
-	  element.data('right', right);
+	  div.data('left', left);
+	  div.data('right', right);
 
 	  var currentImages = manager.getCurrentPages();
-	  display_new_images(element, currentImages, 'initial');
+	  display_new_images(div, currentImages, 'initial');
 
-	  $([left, right]).each(function (key, value) {
+	  $([left, right]).each(function (index, value) {
 	      value.css('width', '450px').
-	      css('position', 'relative');
+		  css('position', 'relative');
 	      // enable gestures
 	      value.gestureable();
-	      value.mouseup(small_gesture);
-	      value.mousedown(disable_scroll);
+	      value.mouseup(small_gesture).
+		  mousedown(disable_scroll);
 	      // add to the display
-	      element.append(value);
+	      div.append(value);
 	  });
       }
 
