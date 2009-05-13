@@ -134,12 +134,14 @@
 	      first_old.hide(effect, {direction: 'left'}, duration, function () { 
 		  console.log('removing', first_old);
 		  first_old.remove();
+
+		  // and now the same thing with the other side
+		  second_new.show(effect, {direction: 'right'}, duration, function() { 
+		      second_old.remove();
+		  });
 	      });
 	  });
 
-	  second_new.show(effect, {direction: 'right'}, duration, function() { 
-	      second_old.remove();
-	  });
       }
 
       function flipbook(element, images) {
