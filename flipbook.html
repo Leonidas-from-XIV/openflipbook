@@ -151,6 +151,10 @@
       }
 
       function flipbook(div, images) {
+	  // delete everything that was inside the div
+	  // (people might want to write an JavaScript-less fallback there)
+	  div.empty();
+
 	  var manager = new ImageManager(images);
 	  // take care that the number of images stays even
 	  images.unshift(null);
@@ -218,7 +222,7 @@
     </script>
   </head>
   <body>
-    <div id="flipbook"></div>
+    <div id="flipbook">No JavaScript? What a pity.</div>
     <p>Usage: gesture left/right to change images, up/down to zoom in/out</p>
     <p>The flipbook uses a number of libs:</p>
     <p>
