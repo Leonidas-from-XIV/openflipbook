@@ -107,12 +107,13 @@
 	      // add the new image below
 	      var new_content = $('<img src="' + images[key] 
 				  + '_small.jpg" />');
-	      new_content.css('position', 'absolute').css('top', 0).
-	      css((key == 0) ? 'right' : 'left', 0);
+	      new_content.css('position', 'absolute').css('top', 0);
+	      new_content.hide();
+	      //css((key == 0) ? 'right' : 'left', 0);
 	      value.append(new_content);
 	  });
 
-	  fold([right, 'left'], [left, 'left']);
+	  fold(right, left);
       }
 
       function fold(first, second) {
@@ -121,19 +122,26 @@
 	  var duration = undefined;
 
 	  // hide the first frame
-	  var first_old = $('img:first', first[0]);
-	  first_old.hide(effect, {direction: first[1]}, duration, 
+	  var first_old = $('img:first', first);
+	  var second_old = $('img:first', second);
+	  console.log(first);
+	  console.log(first_old);
+	  first_old.hide().next().show().prev().remove();
+	  second_old.hide().next().show().prev().remove();
+	  /*
+	  first_old.show(effect, {direction: 'left'}, duration, 
 			   function () {
-			       first_old.remove();
+			       //first_old.remove();
 
 			       // now do the second frame
-			       var second_old = $('img:first', second[0]);
-			       second_old.hide(effect, {direction: second[1]},
+			       var second_old = $('img:first', second);
+			       second_old.hide(effect, {direction: 'left'},
 					       duration,
 					       function () {
-						   second_old.remove();
+						   //second_old.remove();
 					       });
 			   });
+*/
       }
 
       function flipbook(element, images) {
