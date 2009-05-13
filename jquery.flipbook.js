@@ -6,6 +6,7 @@
  *  - jQuery 1.3.2 (http://jquery.com/)
  *  - jQuery UI 1.7.1 (http://jqueryui.com/)
  *  - jQuery Event Special Gesture (http://code.google.com/p/jquery-event-special-gesture/)
+ *  - jQuery Preload (http://flesler.blogspot.com/2008/01/jquerypreload.html)
  */
 
 (function($) {
@@ -136,7 +137,8 @@
     }
 
     jQuery.fn.flipbook = function (images) {
-	 var div = this;
+	/* jQuery entry point for this plugin */
+	var div = this;
 	// delete everything that was inside the div
 	// (people might want to write an JavaScript-less fallback there)
 	div.empty();
@@ -199,5 +201,5 @@
 
 	// return the passed object, since this is jQuery
 	return div;
-    }
+    };
 })(jQuery);
