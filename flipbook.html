@@ -165,28 +165,34 @@
 	      css('border', '2px dashed white');
 
 	  // create a spacer div and attach it
-	  var spacer = $('<div class="spacer"></div>');
-	  spacer.css('height', '162px');
-	  div.data('spacer', spacer);
-	  div.append(spacer);
+	  var spacer = $('<div class="spacer"></div>').
+	      css('height', '162px');
+	  // add the spacer to the divs data
+	  div.data('spacer', spacer).
+	      // and append it to the div in the DOM
+	      append(spacer);
 
+	  // create the zoomed element
 	  var zoomed = $('<img />');
 	  zoomed.gestureable();
 	  zoomed.mouseup(large_gesture).
 	      mousedown(disable_scroll).
 	      hide();
 
-	  div.data('zoomed', zoomed);
-	  div.append(zoomed);
+	  // add to the data attribute and add to DOM
+	  div.data('zoomed', zoomed).
+	      append(zoomed);
 
-	  // create the images
-	  var left = $('<div><img /></div>');
-	  var right = $('<div><img /></div>');
-	  left.css('float', 'left');
-	  right.css('float', 'right');
+	  // create the image holders, style them
+	  var left = $('<div><img /></div>').
+	      css('float', 'left');
+	  var right = $('<div><img /></div>').
+	      css('float', 'right');
+	  // add them to the data of the containing DIV
 	  div.data('left', left);
 	  div.data('right', right);
 
+	  // get the pages that should get displayed
 	  var currentImages = manager.getCurrentPages();
 	  display_new_images(div, currentImages, 'initial');
 
