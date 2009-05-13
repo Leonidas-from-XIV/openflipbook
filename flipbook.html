@@ -69,11 +69,11 @@
 	      break;
 	  case 'L':
 	      var images = manager.turnPrevious();
-	      display_new_images(container, images);
+	      display_new_images(container, images, 'prev');
 	      break;
 	  case 'R':
 	      var images = manager.turnNext();
-	      display_new_images(container, images);
+	      display_new_images(container, images, 'next');
 	      break;
 	  }
       }
@@ -95,7 +95,7 @@
 	  return false;
       }
 
-      function display_new_images(container, images) {
+      function display_new_images(container, images, orientation) {
 	  var left = container.data('left');
 	  var right = container.data('right');
 
@@ -108,7 +108,20 @@
 	      value.append(new_content);
 	  });
 
-	  fold(right, left);
+	  switch (orientation) {
+	  case 'next':
+	      fold(right, left);
+	      break;
+	  case 'prev':
+	      fold(left, right);
+	      break;
+	  case 'initial':
+	  case undefined:
+	      // show stuff without an effect
+	      $([left, right]).each(function (key, value) {
+		  $('img:first', value).next().show().prev().remove();
+	      });
+	  }
       }
 
       function fold(first, second) {
@@ -170,7 +183,7 @@
 	  element.data('right', right);
 
 	  var currentImages = manager.getCurrentPages();
-	  display_new_images(element, currentImages);
+	  display_new_images(element, currentImages, 'initial');
 
 	  $([left, right]).each(function (key, value) {
 	      value.css('width', '450px').
