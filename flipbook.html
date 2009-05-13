@@ -154,6 +154,10 @@
 
       function flipbook(element, images) {
 	  var manager = new ImageManager(images);
+	  // take care that the number of images stays even
+	  images.unshift(null);
+	  images.push(null);
+	  // attach the manager to the data attribute
 	  element.data('manager', manager);
 
 	  // apply the style
@@ -168,8 +172,8 @@
 	  var zoomed = $('<img />');
 	  zoomed.gestureable();
 	  zoomed.mouseup(large_gesture).
-	  mousedown(disable_scroll).
-	  hide();
+	      mousedown(disable_scroll).
+	      hide();
 
 	  element.data('zoomed', zoomed);
 	  element.append(zoomed);
