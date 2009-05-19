@@ -49,6 +49,17 @@
     function small_gesture(event) {
 	/* called in mousedown of small images */
 	var container = $(event.target).parent().parent();
+
+	if (!container.data('gesture-sensitive')) {
+	    // short cut if an animation is playing already
+	    return true;
+	}
+	else {
+	    // deactivate any gestures until the currently
+	    // processed one is done.
+	    container.data('gesture-sensitive', false);
+	}
+
 	var manager = container.data('manager');
 	var large = $(event.target).
             attr('src').
@@ -146,6 +157,9 @@
 	// options
 	var effect = 'slide';
 	var duration = undefined;
+	// the container <div> of the whole animation. 
+	// not pretty to get it over first[0]
+	var container = first[0].parent();
 
 	// hide the first frame
 	var first_old = $(':first', first[0]);
@@ -166,6 +180,8 @@
   		second_new.show(effect, {direction: second[1]}, duration, function() {
   		    // after the effect finished, it is safe to remove the old element
   		    second_old.remove();
+		    // re-activate gesture sensivity
+		    container.data('gesture-sensitive', true);
   		});
             });
 	});
@@ -267,6 +283,9 @@
             // add to the display
             div.append(value);
 	});
+
+	// activate the gesture bindings
+	div.data('gesture-sensitive', true);
 
 	// return the passed object, since this is jQuery
 	return div;
