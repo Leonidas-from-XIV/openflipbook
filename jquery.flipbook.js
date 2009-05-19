@@ -81,8 +81,16 @@
 
 	$([left, right]).each(function (index, value) {
 	    // add the new image below
-	    var new_content = $('<img src="' + images[index] 
-				+ '_small.jpg" />');
+	    if (images[index] != null) {
+		// create the image
+		var new_content = $('<img src="' + images[index] 
+				    + '_small.jpg" />');
+	    }
+	    else {
+		// create a dummy-div instead of the image
+		var new_content = $('<div></div>');
+	    }
+
 	    new_content.css('position', 'absolute').
 		css('top', 0).
 		hide();
@@ -102,7 +110,7 @@
 	    // show stuff without an effect
 	    $([left, right]).each(function (index, value) {
 		// show the next one and delete img:first
-		$('img:first', value).next().show().prev().remove();
+		$(':first', value).next().show().prev().remove();
 	    });
 	}
     }
@@ -113,9 +121,9 @@
 	var duration = undefined;
 
 	// hide the first frame
-	var first_old = $('img:first', first[0]);
+	var first_old = $(':first', first[0]);
 	var first_new = first_old.next();
-	var second_old = $('img:first', second[0]);
+	var second_old = $(':first', second[0]);
 	var second_new = second_old.next();
 
 	// move old image to front
