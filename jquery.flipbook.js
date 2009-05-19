@@ -136,12 +136,46 @@
 	});
     }
 
+    function updateProgress(div) {
+	var percentage_display = $('<div></div>');
+	div.append(percentage_display);
+	div.data('percentage-display', percentage_display);
+
+	var updater = function (stats) {
+	    var percentage = Math.ceil((stats.loaded / stats.total) * 100);
+	    percentage_display.text(percentage+'%');
+	};
+	return updater;
+    }
+
+    function doneProgress(div) {
+	var finisher = function (stats) {
+	    div.data('percentage-display').remove();
+	    div.removeData('percentage-display');
+	};
+	return finisher;
+    }
+
     jQuery.fn.flipbook = function (images) {
 	/* jQuery entry point for this plugin */
 	var div = this;
 	// delete everything that was inside the div
 	// (people might want to write an JavaScript-less fallback there)
 	div.empty();
+
+	// create an array with the names of all images
+	var image_files = [];
+	for (var i = 0; i < images.length; i++) {
+	    image_files.push(images[i] + '_small');
+	    image_files.push(images[i] + '_large');
+	}
+
+	$.preload(image_files, {
+	    base: '',
+	    ext: '.jpg',
+	    onComplete: updateProgress(div),
+	    onFinish: doneProgress(div)
+	});
 
 	var manager = new ImageManager(images);
 	// take care that the number of images stays even
