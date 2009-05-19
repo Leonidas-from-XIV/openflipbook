@@ -61,6 +61,7 @@
 	}
 
 	var manager = container.data('manager');
+	// get the URL of the image that should be displayed
 	var large = $(event.target).
             attr('src').
             replace(/small/, 'large');
@@ -71,7 +72,14 @@
             container.data('left').hide();
             container.data('right').hide();
             container.data('spacer').hide();
-            container.data('zoomed').attr('src', large).show('clip');
+
+	    // get the large image and display it
+	    $('img[src$=' + large +']', container).
+		show('clip', undefined, undefined, function () {
+		// re-activate gestures
+		container.data('gesture-sensitive', true);
+	    });
+
             break;
 	case 'R':
 	    if (manager.canTurnPrevious()) {
@@ -81,6 +89,7 @@
 	    else {
 		// shake the container to provide feedback
 		container.effect('shake');
+		container.data('gesture-sensitive', true);
 	    }
             break;
 	case 'L':
@@ -91,9 +100,11 @@
 	    else {
 		// not possible to turn, visual feedback
 		container.effect('shake');
+		container.data('gesture-sensitive', true);
 	    }
             break;
 	}
+	return true;
     }
 
     function large_gesture(event) {
@@ -101,10 +112,11 @@
 	switch (event.gesture) {
 	case 'U':
 	case 'D':
-            $(event.target).hide();
-            container.data('spacer').show();
-            container.data('left').show();
-            container.data('right').show();
+            $(event.target).hide('clip', undefined, undefined, function () {
+		container.data('spacer').show();
+		container.data('left').show();
+		container.data('right').show();
+	    });
 	}
     }
 
@@ -187,6 +199,7 @@
 	});
     }
 
+    /* called then the preloader has loaded one image */
     function updateProgress(div) {
 	var percentage_display = $('<div></div>');
 	div.append(percentage_display);
@@ -195,10 +208,23 @@
 	var updater = function (stats) {
 	    var percentage = Math.ceil((stats.loaded / stats.total) * 100);
 	    percentage_display.text(percentage+'%');
+
+	    if (stats.image.match(/_large.jpg/)) {
+		// clone node, jQuerize and hide it
+		var loaded_image = $(stats.element.cloneNode(true))
+		loaded_image.gestureable();
+		loaded_image.mouseup(large_gesture).
+		    mousedown(disable_scroll).
+		    hide();
+		div.append(loaded_image);
+	    }
 	};
 	return updater;
     }
 
+    /* called when the preloader has loaded all images.
+       Note that the function returns a closure which will be bound
+       to the event */
     function doneProgress(div) {
 	var finisher = function (stats) {
 	    div.data('percentage-display').remove();
@@ -248,17 +274,6 @@
 	div.data('spacer', spacer).
             // and append it to the div in the DOM
             append(spacer);
-
-	// create the zoomed element
-	var zoomed = $('<img />');
-	zoomed.gestureable();
-	zoomed.mouseup(large_gesture).
-            mousedown(disable_scroll).
-            hide();
-
-	// add to the data attribute and add to DOM
-	div.data('zoomed', zoomed).
-            append(zoomed);
 
 	// create the image holders, style them
 	var left = $('<div><img /></div>').
