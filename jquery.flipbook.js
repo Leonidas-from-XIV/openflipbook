@@ -20,14 +20,29 @@
   		    images[currentPage+1]];
 	};
 
+	/* goes to the next page and returns the images of that page */
 	self.turnNext = function () {
             currentPage += 2;
             return self.getCurrentPages();
 	};
 
+	/* goes to the previous page and returns the images of that page */
 	self.turnPrevious = function () {
             currentPage -= 2;
             return self.getCurrentPages();
+	};
+
+	/* determines whether turning to the next page makes any sense.
+           there might not be any images to display */
+	self.canTurnNext = function () {
+	    // only if we are not at the last page
+	    return currentPage < (images.length - 2);
+	};
+
+	/* determines whether turning to the previous page makes any sense */
+	self.canTurnPrevious = function () {
+	    // only if our current page is positive
+	    return currentPage > 0;
 	};
     };
 
@@ -48,12 +63,24 @@
             container.data('zoomed').attr('src', large).show('clip');
             break;
 	case 'R':
-            var images = manager.turnPrevious();
-            display_new_images(container, images, 'prev');
+	    if (manager.canTurnPrevious()) {
+		var images = manager.turnPrevious();
+		display_new_images(container, images, 'prev');
+	    }
+	    else {
+		// shake the container to provide feedback
+		container.effect('shake');
+	    }
             break;
 	case 'L':
-            var images = manager.turnNext();
-            display_new_images(container, images, 'next');
+	    if (manager.canTurnNext()) {
+		var images = manager.turnNext();
+		display_new_images(container, images, 'next');
+	    }
+	    else {
+		// not possible to turn, visual feedback
+		container.effect('shake');
+	    }
             break;
 	}
     }
