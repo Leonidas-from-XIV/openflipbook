@@ -199,15 +199,17 @@
 	});
     }
 
-    /* called then the preloader has loaded one image */
+    /* function factory, creates a progress bar and an updater function */
     function updateProgress(div) {
 	var percentage_display = $('<div></div>');
+	percentage_display.progressbar({value: 0});
 	div.append(percentage_display);
 	div.data('percentage-display', percentage_display);
 
+	/* called when the preloader has loaded one image */
 	var updater = function (stats) {
 	    var percentage = Math.ceil((stats.loaded / stats.total) * 100);
-	    percentage_display.text(percentage+'%');
+	    percentage_display.progressbar('value', percentage);
 
 	    if (stats.image.match(/_large.jpg/)) {
 		// clone node, jQuerize and hide it
