@@ -201,9 +201,11 @@
 
     /* function factory, creates a progress bar and an updater function */
     function updateProgress(div) {
+	// create the div for the progress bar
 	var percentage_display = $('<div></div>');
+
 	percentage_display.progressbar({value: 0});
-	div.append(percentage_display);
+	div.data('spacer').after(percentage_display);
 	div.data('percentage-display', percentage_display);
 
 	/* called when the preloader has loaded one image */
@@ -229,8 +231,11 @@
        to the event */
     function doneProgress(div) {
 	var finisher = function (stats) {
+	    // remove the progress bar
 	    div.data('percentage-display').remove();
 	    div.removeData('percentage-display');
+	    // resize the spacer to the normal size
+	    div.data('spacer').css('height', '162px');
 	};
 	return finisher;
     }
@@ -241,6 +246,20 @@
 	// delete everything that was inside the div
 	// (people might want to write an JavaScript-less fallback there)
 	div.empty();
+
+	// create a spacer div and attach it
+	var spacer = $('<div></div>').
+            css('height', 650 / 2 +'px');
+	// add the spacer to the divs data
+	div.data('spacer', spacer).
+            // and append it to the div in the DOM
+            append(spacer);
+
+	// apply the style
+	div.css('background-color', 'black').
+            css('width', '900px').
+            css('height', '650px').
+            css('border', '2px dashed white');
 
 	// create an array with the names of all images
 	var image_files = [];
@@ -262,20 +281,6 @@
 	images.push(null);
 	// attach the manager to the data attribute
 	div.data('manager', manager);
-
-	// apply the style
-	div.css('background-color', 'black').
-            css('width', '900px').
-            css('height', '650px').
-            css('border', '2px dashed white');
-
-	// create a spacer div and attach it
-	var spacer = $('<div class="spacer"></div>').
-            css('height', '162px');
-	// add the spacer to the divs data
-	div.data('spacer', spacer).
-            // and append it to the div in the DOM
-            append(spacer);
 
 	// create the image holders, style them
 	var left = $('<div><img /></div>').
