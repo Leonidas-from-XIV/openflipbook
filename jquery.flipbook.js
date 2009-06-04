@@ -230,12 +230,35 @@
        Note that the function returns a closure which will be bound
        to the event */
     function doneProgress(div) {
+	var manager = div.data('manager');
+	var left = div.data('left');
+	var right = div.data('right');
+
+	/* this function gets executed once the preloader is done */
 	var finisher = function (stats) {
 	    // remove the progress bar
 	    div.data('percentage-display').remove();
 	    div.removeData('percentage-display');
 	    // resize the spacer to the normal size
 	    div.data('spacer').css('height', '162px');
+
+	    // get the pages that should get displayed
+	    var currentImages = manager.getCurrentPages();
+	    display_new_images(div, currentImages, 'initial');
+
+	    $([left, right]).each(function (index, value) {
+		value.css('width', '450px').
+  		    css('position', 'relative');
+		// enable gestures
+		value.gestureable();
+		value.mouseup(small_gesture).
+  		    mousedown(disable_scroll);
+		// add to the display
+		div.append(value);
+	    });
+
+	    // activate the gesture bindings
+	    div.data('gesture-sensitive', true);
 	};
 	return finisher;
     }
@@ -258,22 +281,7 @@
 	// apply the style
 	div.css('background-color', 'black').
             css('width', '900px').
-            css('height', '650px').
-            css('border', '2px dashed white');
-
-	// create an array with the names of all images
-	var image_files = [];
-	for (var i = 0; i < images.length; i++) {
-	    image_files.push(images[i] + '_small');
-	    image_files.push(images[i] + '_large');
-	}
-
-	$.preload(image_files, {
-	    base: '',
-	    ext: '.jpg',
-	    onComplete: updateProgress(div),
-	    onFinish: doneProgress(div)
-	});
+            css('height', '650px');
 
 	var manager = new ImageManager(images);
 	// take care that the number of images stays even
@@ -291,23 +299,20 @@
 	div.data('left', left);
 	div.data('right', right);
 
-	// get the pages that should get displayed
-	var currentImages = manager.getCurrentPages();
-	display_new_images(div, currentImages, 'initial');
+	// create an array with the names of all images
+	var image_files = [];
+	for (var i = 0; i < images.length; i++) {
+	    image_files.push(images[i] + '_small');
+	    image_files.push(images[i] + '_large');
+	}
 
-	$([left, right]).each(function (index, value) {
-            value.css('width', '450px').
-  		css('position', 'relative');
-            // enable gestures
-            value.gestureable();
-            value.mouseup(small_gesture).
-  		mousedown(disable_scroll);
-            // add to the display
-            div.append(value);
+	// start the preloader
+	$.preload(image_files, {
+	    base: '',
+	    ext: '.jpg',
+	    onComplete: updateProgress(div),
+	    onFinish: doneProgress(div)
 	});
-
-	// activate the gesture bindings
-	div.data('gesture-sensitive', true);
 
 	// return the passed object, since this is jQuery
 	return div;
