@@ -114,12 +114,12 @@
 
     function large_gesture(gs) {
 	console.log("Running");
-	var container = $(event.target).closest('div');
+	var target = $(this);
+	var container = target.closest('div');
 	console.log(gs);
-	switch (event.gesture) {
-	case 'U':
-	case 'D':
-            $(event.target).hide('clip', undefined, undefined, function () {
+	console.log(container);
+	if (gs.moves.match(/1|2|3|5|6|7/)) {
+            $(target).hide('clip', undefined, undefined, function () {
 		container.data('spacer').show();
 		container.data('left').show();
 		container.data('right').show();
