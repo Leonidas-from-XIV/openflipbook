@@ -48,10 +48,8 @@
 
     function small_gesture(gs) {
 	/* called in mousedown of small images */
-	console.log(gs);
 	var target = $(this);
 	var container = target.parent();
-	console.log(container);
 
 	if (!container.data('gesture-sensitive')) {
 	    // short cut if an animation is playing already
@@ -64,16 +62,13 @@
 	}
 
 	var manager = container.data('manager');
-	console.log(target);
 	// get the URL of the image that should be displayed
 	var large = $('img:first', target).
             attr('src').
             replace(/small/, 'large');
-	console.log(large);
-	console.log(gs.moves.match(/1|2|3/));
 
 	if (gs.moves.match(/1|2|3|5|6|7/)) {
-	    console.log('top/bottom');
+	    // gesture to top or bottom
             container.data('left').hide();
             container.data('right').hide();
             container.data('spacer').hide();
@@ -113,12 +108,11 @@
     }
 
     function large_gesture(gs) {
-	console.log("Running");
 	var target = $(this);
 	var container = target.closest('div');
-	console.log(gs);
-	console.log(container);
+
 	if (gs.moves.match(/1|2|3|5|6|7/)) {
+	    // gesture to top or bottom
             $(target).hide('clip', undefined, undefined, function () {
 		container.data('spacer').show();
 		container.data('left').show();
