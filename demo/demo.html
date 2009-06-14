@@ -5,12 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
   <head>
     <title>Flipbook (demo)</title>
-    <style type="text/css">
-      body {
-	  background-color: black;
-	  color: white;
-      }
-    </style>
+    <link href="yahoolike.css" type="text/css" rel="stylesheet" />
     <link href="http://jquery-ui.googlecode.com/svn/tags/1.7.1/themes/base/jquery-ui.css" type="text/css" rel="stylesheet" />
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.1/jquery-ui.min.js"></script>
@@ -28,15 +23,32 @@
     </script>
   </head>
   <body>
-    <div id="flipbook">No JavaScript? What a pity.</div>
-    <p>Usage: gesture left/right to change images, up/down to zoom in/out</p>
-    <p>The flipbook uses a number of libs:</p>
-    <p>
-      <ul>
-	<li>jQuery</li>
-	<li>jQuery UI</li>
-	<li>jQuery Special Event Gestures</li>
+    <div id="header">
+      <h1 id="doc_title">Flipbook plugin for jQuery</h1>
+      <ul class="trail">
+        <li><a href="http://xivilization.net/">xivilization.net</a> &gt;</li>
+        <li>Demonstration</li>
       </ul>
-    </p>
+    </div>
+    <div id="wrapper">
+      <div id="sidenav"></div>
+      <div id="pagecontent">
+        <h1 id="page_title">Flipbook documentation</h1>
+        <div id="flipbook">No JavaScript? What a pity.</div>
+        <p>Usage: gesture left/right to change images, up/down to zoom
+          in/out</p>
+        <h1>Dependencies</h1>
+        <p>
+          <ul>
+            <li>jQuery 1.3.x</li>
+            <li>jQuery UI 1.7.x</li>
+            <li>jGesture 1.0.3</li>
+          </ul>
+        </p>
+      </div>
+    </div>
+    <div id="footer">
+      <div id="copyright">MIT licensed</div>
+    </div>
   </body>
 </html>
