@@ -70,10 +70,10 @@
             attr('src').
             replace(/small/, 'large');
 	console.log(large);
+	console.log(gs.moves.match(/1|2|3/));
 
-	switch (event.gesture) {
-	case 'U':
-	case 'D':
+	if (gs.moves.match(/1|2|3|5|6|7/)) {
+	    console.log('top/bottom');
             container.data('left').hide();
             container.data('right').hide();
             container.data('spacer').hide();
@@ -84,9 +84,9 @@
 		// re-activate gestures
 		container.data('gesture-sensitive', true);
 	    });
-
-            break;
-	case 'R':
+	}
+	else if (gs.moves.match(/4/)) {
+	    // gesture right
 	    if (manager.canTurnPrevious()) {
 		var images = manager.turnPrevious();
 		display_new_images(container, images, 'prev');
@@ -96,8 +96,9 @@
 		container.effect('shake');
 		container.data('gesture-sensitive', true);
 	    }
-            break;
-	case 'L':
+        }
+	else if (gs.moves.match(/8/)) {
+	    // gesture left
 	    if (manager.canTurnNext()) {
 		var images = manager.turnNext();
 		display_new_images(container, images, 'next');
@@ -107,7 +108,6 @@
 		container.effect('shake');
 		container.data('gesture-sensitive', true);
 	    }
-            break;
 	}
 	return true;
     }
