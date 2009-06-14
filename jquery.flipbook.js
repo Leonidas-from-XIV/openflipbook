@@ -46,9 +46,12 @@
 	};
     };
 
-    function small_gesture(event) {
+    function small_gesture(gs) {
 	/* called in mousedown of small images */
-	var container = $(event.target).parent().parent();
+	console.log(gs);
+	var target = $(this);
+	var container = target.parent();
+	console.log(container);
 
 	if (!container.data('gesture-sensitive')) {
 	    // short cut if an animation is playing already
@@ -61,10 +64,12 @@
 	}
 
 	var manager = container.data('manager');
+	console.log(target);
 	// get the URL of the image that should be displayed
-	var large = $(event.target).
+	var large = $('img:first', target).
             attr('src').
             replace(/small/, 'large');
+	console.log(large);
 
 	switch (event.gesture) {
 	case 'U':
@@ -107,8 +112,10 @@
 	return true;
     }
 
-    function large_gesture(event) {
+    function large_gesture(gs) {
+	console.log("Running");
 	var container = $(event.target).closest('div');
+	console.log(gs);
 	switch (event.gesture) {
 	case 'U':
 	case 'D':
@@ -215,9 +222,8 @@
 
 	    if (stats.image.match(/_large.jpg/)) {
 		// clone node, jQuerize and hide it
-		var loaded_image = $(stats.element.cloneNode(true))
-		loaded_image.gestureable();
-		loaded_image.mouseup(large_gesture).
+		var loaded_image = $(stats.element.cloneNode(true));
+		loaded_image.gesture(large_gesture).
 		    mousedown(disable_scroll).
 		    hide();
 		div.append(loaded_image);
@@ -250,8 +256,7 @@
 		value.css('width', '450px').
   		    css('position', 'relative');
 		// enable gestures
-		value.gestureable();
-		value.mouseup(small_gesture).
+		value.gesture(small_gesture).
   		    mousedown(disable_scroll);
 		// add to the display
 		div.append(value);
