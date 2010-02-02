@@ -1,11 +1,10 @@
 /*!
  * jQuery Flipbook Plugin
- * written in 2009 by Marek Kubica <marek@xivilization.net>
+ * written in 2009, 2010 by Marek Kubica <marek@xivilization.net>
  *
  * Dependencies:
  *  - jQuery 1.3.2 (http://jquery.com/)
  *  - jQuery UI 1.7.1 (http://jqueryui.com/)
- *  - jQuery Event Special Gesture (http://code.google.com/p/jquery-event-special-gesture/)
  *  - jQuery Preload (http://flesler.blogspot.com/2008/01/jquerypreload.html)
  */
 
@@ -47,6 +46,7 @@
     };
 
     function small_gesture(gs) {
+        alert("small gs");
 	/* called in mousedown of small images */
 	var target = $(this);
 	var container = target.parent();
@@ -217,7 +217,7 @@
 	    if (stats.image.match(/_large.jpg/)) {
 		// clone node, jQuerize and hide it
 		var loaded_image = $(stats.element.cloneNode(true));
-		loaded_image.gesture(large_gesture).
+		loaded_image.//gesture(large_gesture).
 		    mousedown(disable_scroll).
 		    hide();
 		div.append(loaded_image);
@@ -250,7 +250,11 @@
 		value.css('width', '450px').
   		    css('position', 'relative');
 		// enable gestures
-		value.gesture(small_gesture).
+		//value.gesture(small_gesture).
+  		//    mousedown(disable_scroll);
+                value.gestures({
+                    callback: function (gs) { alert (gs); }
+                }).
   		    mousedown(disable_scroll);
 		// add to the display
 		div.append(value);
