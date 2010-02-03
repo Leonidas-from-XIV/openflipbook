@@ -74,7 +74,7 @@
             container.data('spacer').hide();
 
 	    // http://dev.jquery.com/ticket/5895
-            // $('div[style*=' + large + ']', container)); doesn't work
+            // $('div[style*=' + large + ']', container); doesn't work
 
             $('div', container).each(function (index, value) {
                 if ($(value).css('background-image').match(large)) {
@@ -140,8 +140,6 @@
 	    // add the new image below
 	    if (images[index] != null) {
 		// create the image
-		var new_content = $('<img src="' + images[index] 
-				    + '_small.jpg" />');
                 var new_content = $('<div></div>').
                     css('background-image', 'url(' + images[index] + '_small.jpg)').
                     css('width', '450px').
@@ -228,8 +226,8 @@
                 var loaded_div = $('<div></div>').
                     gesture(large_gesture).
                     css('background-image', 'url(' + stats.image + ')').
-                    css('width', '450px').
-                    css('height', '325px').
+                    css('width', '900px').
+                    css('height', '650px').
                     hide();
 
                 /*
