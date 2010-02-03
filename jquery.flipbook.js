@@ -62,9 +62,10 @@
 
 	var manager = container.data('manager');
 	// get the URL of the image that should be displayed
-	var large = $('img:first', target).
-            attr('src').
+	var large = $('div:first', target).
+            css('background-image').
             replace(/small/, 'large');
+        //console.log(large);
 
 	if (gs.moves.match(/1|2|3|5|6|7/)) {
 	    // gesture to top or bottom
@@ -135,6 +136,10 @@
 		// create the image
 		var new_content = $('<img src="' + images[index] 
 				    + '_small.jpg" />');
+                var new_content = $('<div></div>').
+                    css('background-image', 'url(' + images[index] + '_small.jpg)').
+                    css('width', '450px').
+                    css('height', '325px');
 	    }
 	    else {
 		// create a dummy-div instead of the image
@@ -260,8 +265,7 @@
 		value.css('width', '450px').
   		    css('position', 'relative');
 		// enable gestures
-		value.gesture(small_gesture).
-  		    mousedown(disable_scroll);
+		value.gesture(small_gesture);
 		// add to the display
 		div.append(value);
 	    });
