@@ -64,8 +64,8 @@
 	// get the URL of the image that should be displayed
 	var large = $('div:first', target).
             css('background-image').
-            replace(/small/, 'large');
-        //console.log(large);
+            replace(/small/, 'large').
+            replace(/url\((.*)\)/, '$1');
 
 	if (gs.moves.match(/1|2|3|5|6|7/)) {
 	    // gesture to top or bottom
@@ -73,12 +73,18 @@
             container.data('right').hide();
             container.data('spacer').hide();
 
-	    // get the large image and display it
-	    $('img[src$=' + large +']', container).
-		show('clip', undefined, undefined, function () {
-		// re-activate gestures
-		container.data('gesture-sensitive', true);
-	    });
+	    // http://dev.jquery.com/ticket/5895
+            // $('div[style*=' + large + ']', container)); doesn't work
+
+            $('div', container).each(function (index, value) {
+                if ($(value).css('background-image').match(large)) {
+		    $(value).show('clip', undefined, undefined, function () {
+		        // re-activate gestures
+		        container.data('gesture-sensitive', true);
+	            });
+                }
+            });
+
 	}
 	else if (gs.moves.match(/4/)) {
 	    // gesture right
