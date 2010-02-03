@@ -46,7 +46,6 @@
     };
 
     function small_gesture(gs) {
-        alert("small gs");
 	/* called in mousedown of small images */
 	var target = $(this);
 	var container = target.parent();
@@ -215,11 +214,22 @@
 	    percentage_display.progressbar('value', percentage);
 
 	    if (stats.image.match(/_large.jpg/)) {
+                var loaded_div = $('<div></div>').
+                    gesture(large_gesture).
+                    css('background-image', 'url(' + stats.image + ')').
+                    css('width', '450px').
+                    css('height', '325px').
+                    hide();
+
+                /*
 		// clone node, jQuerize and hide it
 		var loaded_image = $(stats.element.cloneNode(true));
+                console.log(loaded_image);
 		loaded_image.//gesture(large_gesture).
 		    mousedown(disable_scroll).
 		    hide();
+                */
+                var loaded_image = loaded_div;
 		div.append(loaded_image);
 	    }
 	};
@@ -250,11 +260,7 @@
 		value.css('width', '450px').
   		    css('position', 'relative');
 		// enable gestures
-		//value.gesture(small_gesture).
-  		//    mousedown(disable_scroll);
-                value.gestures({
-                    callback: function (gs) { alert (gs); }
-                }).
+		value.gesture(small_gesture).
   		    mousedown(disable_scroll);
 		// add to the display
 		div.append(value);
