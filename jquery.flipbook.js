@@ -5,6 +5,7 @@
  * Dependencies:
  *  - jQuery 1.3.2 (http://jquery.com/)
  *  - jQuery UI 1.7.1 (http://jqueryui.com/)
+ *  - jGesture 1.0.3 (http://sites.google.com/site/jgesture/)
  *  - jQuery Preload (http://flesler.blogspot.com/2008/01/jquerypreload.html)
  */
 
@@ -45,7 +46,7 @@
 	};
     };
 
-    function small_gesture(gs) {
+    function smallGesture(gs) {
 	/* called in mousedown of small images */
 	var target = $(this);
 	var container = target.parent();
@@ -90,7 +91,7 @@
 	    // gesture right
 	    if (manager.canTurnPrevious()) {
 		var images = manager.turnPrevious();
-		display_new_images(container, images, 'prev');
+		displayNewImages(container, images, 'prev');
 	    }
 	    else {
 		// shake the container to provide feedback
@@ -102,7 +103,7 @@
 	    // gesture left
 	    if (manager.canTurnNext()) {
 		var images = manager.turnNext();
-		display_new_images(container, images, 'next');
+		displayNewImages(container, images, 'next');
 	    }
 	    else {
 		// not possible to turn, visual feedback
@@ -113,7 +114,7 @@
 	return true;
     }
 
-    function large_gesture(gs) {
+    function largeGesture(gs) {
 	var target = $(this);
 	var container = target.parent('div');
 
@@ -127,12 +128,12 @@
 	}
     }
 
-    function disable_scroll(event) {
+    function disableScroll(event) {
 	/* Simply disables the dragging of elements */
 	return false;
     }
 
-    function display_new_images(container, images, orientation) {
+    function displayNewImages(container, images, orientation) {
 	var left = container.data('left');
 	var right = container.data('right');
 
@@ -224,7 +225,7 @@
 
 	    if (stats.image.match(/_large.jpg/)) {
                 var loaded_div = $('<div></div>').
-                    gesture(large_gesture).
+                    gesture(largeGesture).
                     css('background-image', 'url(' + stats.image + ')').
                     css('width', '900px').
                     css('height', '650px').
@@ -234,7 +235,7 @@
 		// clone node, jQuerize and hide it
 		var loaded_image = $(stats.element.cloneNode(true));
                 console.log(loaded_image);
-		loaded_image.//gesture(large_gesture).
+		loaded_image.//gesture(largeGesture).
 		    mousedown(disable_scroll).
 		    hide();
                 */
@@ -263,13 +264,13 @@
 
 	    // get the pages that should get displayed
 	    var currentImages = manager.getCurrentPages();
-	    display_new_images(div, currentImages, 'initial');
+	    displayNewImages(div, currentImages, 'initial');
 
 	    $([left, right]).each(function (index, value) {
 		value.css('width', '450px').
   		    css('position', 'relative');
 		// enable gestures
-		value.gesture(small_gesture);
+		value.gesture(smallGesture);
 		// add to the display
 		div.append(value);
 	    });
