@@ -3,7 +3,7 @@
  * written in 2009, 2010 by Marek Kubica <marek@xivilization.net>
  *
  * Dependencies:
- *  - jQuery 1.3.2 (http://jquery.com/)
+ *  - jQuery 1.4.1 (http://jquery.com/)
  *  - jQuery UI 1.7.1 (http://jqueryui.com/)
  *  - jGesture 1.0.3 (http://sites.google.com/site/jgesture/)
  *  - jQuery Preload (http://flesler.blogspot.com/2008/01/jquerypreload.html)
