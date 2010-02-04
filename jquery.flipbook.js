@@ -115,7 +115,7 @@
 
     function large_gesture(gs) {
 	var target = $(this);
-	var container = target.closest('div');
+	var container = target.parent('div');
 
 	if (gs.moves.match(/1|2|3|5|6|7/)) {
 	    // gesture to top or bottom
@@ -168,7 +168,7 @@
 	case undefined:
 	    // show stuff without an effect
 	    $([left, right]).each(function (index, value) {
-		// show the next one and delete img:first
+		// show the next one and delete div:first
 		$(':first', value).next().show().prev().remove();
 	    });
 	}
