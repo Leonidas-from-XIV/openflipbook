@@ -12,13 +12,13 @@
 (function($) {
     /* a closure-based class */
     var ImageManager = function (images) {
-	var self = this;
-	var currentPage = 0;
+        var self = this;
+        var currentPage = 0;
 
-	self.getCurrentPages = function () {
+        self.getCurrentPages = function () {
             return [images[currentPage], 
-  		    images[currentPage+1]];
-	};
+                    images[currentPage+1]];
+        };
 
 	/* goes to the next page and returns the images of that page */
 	self.turnNext = function () {
@@ -142,23 +142,21 @@
 	var right = container.data('right');
 
 	$([left, right]).each(function (index, value) {
-	    // add the new image below
+            var newContent = $('<div></div>');
+
+	    // add the new image below, but only if it exists, otherwise
+            // the dummy div is just fine
 	    if (images[index] != null) {
-		// create the image
-                var new_content = $('<div></div>').
+                newContent.
                     css('background-image', 'url(' + images[index] + '_small.jpg)').
                     css('width', '450px').
                     css('height', '325px');
 	    }
-	    else {
-		// create a dummy-div instead of the image
-		var new_content = $('<div></div>');
-	    }
 
-	    new_content.css('position', 'absolute').
+	    newContent.css('position', 'absolute').
 		css('top', 0).
 		hide();
-	    value.append(new_content);
+	    value.append(newContent);
 	});
 
 	// determine what to flip in which way
@@ -188,24 +186,24 @@
 	var container = first[0].parent();
 
 	// hide the first frame
-	var first_old = $(':first', first[0]);
-	var first_new = first_old.next();
-	var second_old = $(':first', second[0]);
-	var second_new = second_old.next();
+	var firstOld = $(':first', first[0]);
+	var firstNew = firstOld.next();
+	var secondOld = $(':first', second[0]);
+	var secondNew = secondOld.next();
 
 	// move old image to front
-	first_old.css('z-index', 1);
+	firstOld.css('z-index', 1);
 	// show the new image immediately (time: 0)
-	first_new.show(effect, undefined, 0, function () {
+	firstNew.show(effect, undefined, 0, function () {
             // after it is shown, hide the old one with an effect
-            first_old.hide(effect, {direction: first[1]}, duration, function () {
+            firstOld.hide(effect, {direction: first[1]}, duration, function () {
   		// after that one is hidden, it is safe to remove it
-  		first_old.remove();
+  		firstOld.remove();
 
   		// and now the same thing with the other side
-  		second_new.show(effect, {direction: second[1]}, duration, function() {
+  		secondNew.show(effect, {direction: second[1]}, duration, function() {
   		    // after the effect finished, it is safe to remove the old element
-  		    second_old.remove();
+  		    secondOld.remove();
 		    // re-activate gesture sensivity
 		    container.data('gesture-sensitive', true);
   		});
@@ -216,19 +214,19 @@
     /* function factory, creates a progress bar and an updater function */
     function updateProgress(div) {
 	// create the div for the progress bar
-	var percentage_display = $('<div></div>');
+	var percentageDisplay = $('<div></div>');
 
-	percentage_display.progressbar({value: 0});
-	div.data('spacer').after(percentage_display);
-	div.data('percentage-display', percentage_display);
+	percentageDisplay.progressbar({value: 0});
+	div.data('spacer').after(percentageDisplay);
+	div.data('percentage-display', percentageDisplay);
 
 	/* called when the preloader has loaded one image */
 	var updater = function (stats) {
 	    var percentage = Math.ceil((stats.loaded / stats.total) * 100);
-	    percentage_display.progressbar('value', percentage);
+	    percentageDisplay.progressbar('value', percentage);
 
 	    if (stats.image.match(/_large.jpg/)) {
-                var loaded_div = $('<div></div>').
+                var loadedDiv = $('<div></div>').
                     mousedown(disableDrag).
                     gesture(largeGesture).
                     css('background-image', 'url(' + stats.image + ')').
@@ -236,7 +234,7 @@
                     css('height', '650px').
                     hide();
 
-		div.append(loaded_div);
+		div.append(loadedDiv);
 	    }
 	};
 	return updater;
@@ -316,14 +314,14 @@
 	div.data('right', right);
 
 	// create an array with the names of all images
-	var image_files = [];
+	var imageFiles = [];
 	for (var i = 0; i < images.length; i++) {
-	    image_files.push(images[i] + '_small');
-	    image_files.push(images[i] + '_large');
+	    imageFiles.push(images[i] + '_small');
+	    imageFiles.push(images[i] + '_large');
 	}
 
 	// start the preloader
-	$.preload(image_files, {
+	$.preload(imageFiles, {
 	    base: '',
 	    ext: '.jpg',
 	    onComplete: updateProgress(div),
