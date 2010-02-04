@@ -320,6 +320,9 @@
 	    imageFiles.push(images[i] + '_large');
 	}
 
+        // IE throws stack overfloas becaus too many objects load
+        // so reduce the number
+        $.preload.gap = 13;
 	// start the preloader
 	$.preload(imageFiles, {
 	    base: '',
