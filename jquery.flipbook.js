@@ -128,9 +128,13 @@
 	}
     }
 
-    function disableScroll(event) {
+    function disableDrag(event) {
 	/* Simply disables the dragging of elements */
-	return false;
+        // http://www.redips.net/firefox/disable-image-dragging/
+        if (event.preventDefault) {
+            event.preventDefault();
+        }
+        return false;
     }
 
     function displayNewImages(container, images, orientation) {
@@ -225,22 +229,14 @@
 
 	    if (stats.image.match(/_large.jpg/)) {
                 var loaded_div = $('<div></div>').
+                    mousedown(disableDrag).
                     gesture(largeGesture).
                     css('background-image', 'url(' + stats.image + ')').
                     css('width', '900px').
                     css('height', '650px').
                     hide();
 
-                /*
-		// clone node, jQuerize and hide it
-		var loaded_image = $(stats.element.cloneNode(true));
-                console.log(loaded_image);
-		loaded_image.//gesture(largeGesture).
-		    mousedown(disable_scroll).
-		    hide();
-                */
-                var loaded_image = loaded_div;
-		div.append(loaded_image);
+		div.append(loaded_div);
 	    }
 	};
 	return updater;
@@ -267,10 +263,12 @@
 	    displayNewImages(div, currentImages, 'initial');
 
 	    $([left, right]).each(function (index, value) {
-		value.css('width', '450px').
-  		    css('position', 'relative');
-		// enable gestures
-		value.gesture(smallGesture);
+                // set the style, disable dragging, enable gestures
+                value.
+                    css('width', '450px').
+                    css('position', 'relative').
+                    mousedown(disableDrag).
+                    gesture(smallGesture);
 		// add to the display
 		div.append(value);
 	    });
